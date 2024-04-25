@@ -1,5 +1,12 @@
 import HttpError from "../helpers/HttpError.js";
 import contactsService from "../services/contactsServices.js";
+import Joi from "joi";
+
+const addShema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 export const getAllContacts = async (req, res, next) => {
   try {
@@ -41,24 +48,24 @@ export const deleteContact = async (req, res, next) => {
     if (!contact) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: contact,
-    });
+    res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
 };
 
 export const createContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const contact = await contactsService.addContact(name, email, phone);
-  res.status(200).json({
-    status: "success",
-    code: 201,
-    data: contact,
-  });
+  try {
+    const { error } = addShema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { name, email, phone } = req.body;
+    const contact = await contactsService.addContact(name, email, phone);
+    res.status(201).json(contact);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const updateContact = (req, res) => {};

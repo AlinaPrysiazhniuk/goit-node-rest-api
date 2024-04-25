@@ -8,7 +8,8 @@ const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); //перевіряє тіло запиту, який там тип
+//якщо рядок то перетворює в json
 
 app.use("/api/contacts", contactsRouter);
 
