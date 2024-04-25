@@ -2,30 +2,38 @@ import HttpError from "../helpers/HttpError.js";
 import contactsService from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
-  const contacts = await contactsService.listContacts();
-  if (!contacts.length) {
-    throw HttpError(404, "Contacts not found");
+  try {
+    const contacts = await contactsService.listContacts();
+    if (!contacts.length) {
+      throw HttpError(404, "Contacts not found");
+    }
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: { contacts },
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(error.status).send(error.message);
   }
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    data: { contacts },
-  });
 };
 
 export const getOneContact = async (req, res) => {
-  const { id } = req.params;
-  const contact = await contactsService.getContactById(id);
-  if (!contact) {
-    res.status(404).json({
-      message: "Not found",
+  try {
+    const { id } = req.params;
+    const contact = await contactsService.getContactById(id);
+    if (!contact) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: contact,
     });
+  } catch (error) {
+    console.log(error.message);
+    res.status(error.status).send(error.message);
   }
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    data: contact,
-  });
 };
 
 export const deleteContact = async (req, res) => {
