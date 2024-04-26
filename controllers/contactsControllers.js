@@ -47,7 +47,7 @@ export const createContact = async (req, res, next) => {
   try {
     const { error } = createContactSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      throw HttpError(400, "All fields (name, email, phone) are required");
     }
     const { name, email, phone } = req.body;
     const contact = await contactsService.addContact(name, email, phone);
