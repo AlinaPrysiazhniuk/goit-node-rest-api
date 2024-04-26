@@ -11,11 +11,7 @@ export const getAllContacts = async (req, res, next) => {
     if (!contacts.length) {
       throw HttpError(404, "Contacts not found");
     }
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: { contacts },
-    });
+    res.status(200).json(contacts);
   } catch (error) {
     next(error);
   }
@@ -28,11 +24,7 @@ export const getOneContact = async (req, res, next) => {
     if (!contact) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: contact,
-    });
+    res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
