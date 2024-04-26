@@ -1,6 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
 import contactsService from "../services/contactsServices.js";
-import { createContactSchema } from "../schemas/contactsSchemas.js";
+import {
+  createContactSchema,
+  updateContactSchema,
+} from "../schemas/contactsSchemas.js";
 import controllerDecorator from "../helpers/controllerDecorator.js";
 
 export const getAllContacts = controllerDecorator(async (req, res) => {
@@ -47,25 +50,26 @@ export const createContact = controllerDecorator(async (req, res) => {
   res.status(201).json(contact);
 });
 
-// export const updateContact = controllerDecorator(async (req, res) => {
-//   const { error } = createContactSchema.validate(req.body);
-//   if (error) {
-//     throw HttpError(400, error.message);
-//   }
+export const updateContact = controllerDecorator(async (req, res) => {
+  if (!req.body) {
+    throw HttpError(400, "Body must have at least one field");
+  }
 
-//   const { id } = req.params;
-//   const { name, email, phone } = req.body;
-//   if (!req.body) {
-//     throw HttpError(400, "Body must have at least one field");
-//   }
-//   const updatedContact = await contactsService.updateContact(
-//     id,
-//     name,
-//     email,
-//     phone
-//   );
-//   if (!updatedContact) {
-//     return res.status(404).json({ message: "Contact not found" });
-//   }
-//   res.status(201).json(updatedContact);
-// });
+  const { error } = updateContactSchema.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
+  const updatedContact = await contactsService.updateContact(
+    id,
+    name,
+    email,
+    phone
+  );
+  if (!updatedContact) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.status(201).json(updatedContact);
+});

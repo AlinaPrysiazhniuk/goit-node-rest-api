@@ -10,4 +10,11 @@ export const createContactSchema = Joi.object({
     .required(),
 });
 
-export const updateContactSchema = Joi.object({});
+export const updateContactSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+  phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
+}).or("name", "email", "phone");

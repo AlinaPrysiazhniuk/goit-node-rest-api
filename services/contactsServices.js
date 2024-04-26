@@ -47,15 +47,23 @@ async function removeContact(contactId) {
   return removeContact;
 }
 
-async function updateContact(contactId, name, email, phone) {
+async function updateContact(id, name, email, phone) {
   const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
+  const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index].name = name;
-  contacts[index].email = email;
-  contacts[index].phone = phone;
+
+  if (name !== undefined) {
+    contacts[index].name = name;
+  }
+  if (email !== undefined) {
+    contacts[index].email = email;
+  }
+  if (phone !== undefined) {
+    contacts[index].phone = phone;
+  }
+
   await writeContacts(contacts);
   return contacts[index];
 }
