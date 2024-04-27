@@ -59,10 +59,6 @@ export const createContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    if (!req.body) {
-      throw HttpError(400, "Body must have at least one field");
-    }
-
     const { error } = updateContactSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
