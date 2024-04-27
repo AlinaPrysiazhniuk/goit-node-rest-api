@@ -17,4 +17,6 @@ export const updateContactSchema = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
-}).or("name", "email", "phone");
+})
+  .min(1)
+  .message("...");
