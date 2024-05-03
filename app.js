@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 import contactsRouter from "./routes/contactsRouter.js";
 
 const app = express();
+
 const { DB_URI } = process.env;
-// mongoose.set("strictQuery", true);
 
 mongoose
   .connect(DB_URI)
@@ -20,22 +20,6 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// async function run() {
-//   try {
-//     await mongoose.connect(DB_URI);
-//     app.listen(3000, () => {
-//       console.log("Server is running. Use our API on port: 3000");
-//     });
-//   } finally {
-//     await mongoose.disconnect();
-//   }
-// }
-
-// run().catch((error) => {
-//   console.log(error.message);
-//   process.exit(1);
-// });
 
 app.use(morgan("tiny"));
 app.use(cors());
