@@ -19,7 +19,7 @@ export const getAllContacts = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
-    await createContactSchema.validateAsync(req.body);
+    // await createContactSchema.validateAsync(req.body);
 
     const result = await Contact.create(req.body);
 
