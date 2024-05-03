@@ -1,7 +1,6 @@
 {
   "name": "goit-node-rest-api",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -20,5 +19,6 @@
     "joi": "^17.13.0",
     "morgan": "^1.10.0",
     "nanoid": "^5.0.7"
-  }
+  },
+  "description": ""
 }
