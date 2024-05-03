@@ -1,17 +1,23 @@
 import HttpError from "../helpers/HttpError.js";
-import contactsService from "../services/contactsServices.js";
-import {
-  createContactSchema,
-  updateContactSchema,
-} from "../schemas/contactsSchemas.js";
+import { Contact } from "../models/contacts.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsService.listContacts();
-    if (!contacts.length) {
+    const result = await Contact.find();
+    if (!result) {
       throw HttpError(404, "Contacts not found");
     }
-    res.status(200).json(contacts);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createContact = async (req, res, next) => {
+  try {
+    const result = await Contact.create(req.body);
+
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -20,11 +26,18 @@ export const getAllContacts = async (req, res, next) => {
 export const getOneContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const contact = await contactsService.getContactById(id);
-    if (!contact) {
-      throw HttpError(404, "Not found");
-    }
+    const contact = await Contact.findById(id);
     res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -33,51 +46,21 @@ export const getOneContact = async (req, res, next) => {
 export const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const contact = await contactsService.removeContact(id);
-    if (!contact) {
-      throw HttpError(404, "Not found");
-    }
+    const contact = await Contact.findByIdAndDelete(id);
     res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
 };
 
-export const createContact = async (req, res, next) => {
+export const updateStatusContact = async (req, res, next) => {
   try {
-    const { error } = createContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { name, email, phone } = req.body;
-    const contact = await contactsService.addContact(name, email, phone);
-    res.status(201).json(contact);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateContact = async (req, res, next) => {
-  try {
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-
     const { id } = req.params;
-    const { name, email, phone } = req.body;
-    const updatedContact = await contactsService.updateContact(
-      id,
-      name,
-      email,
-      phone
-    );
-
-    if (!updatedContact) {
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    if (!result) {
       throw HttpError(404, "Not found");
     }
-
-    res.status(200).json(updatedContact);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
