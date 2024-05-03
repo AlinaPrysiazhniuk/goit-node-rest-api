@@ -7,12 +7,12 @@ import contactsRouter from "./routes/contactsRouter.js";
 
 const app = express();
 
-const { DB_URI } = process.env;
+const { DB_URI, PORT } = process.env;
 
 mongoose
   .connect(DB_URI)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful");
     });
   })
