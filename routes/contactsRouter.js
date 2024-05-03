@@ -13,6 +13,7 @@ import { validateBody } from "../middlewares/validateBody.js";
 import {
   createContactSchema,
   updateContactSchema,
+  updateFavoriteSchema,
 } from "../schemas/contactsSchemas.js";
 
 const contactsRouter = express.Router();
@@ -32,6 +33,11 @@ contactsRouter.put(
   updateContact
 );
 
-contactsRouter.patch("/:id/favorite", isValidId, updateStatusContact);
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(updateFavoriteSchema),
+  updateStatusContact
+);
 
 export default contactsRouter;

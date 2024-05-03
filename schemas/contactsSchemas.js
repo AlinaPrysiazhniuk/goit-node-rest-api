@@ -8,7 +8,7 @@ export const createContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .required(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean().required(),
 });
 
 export const updateContactSchema = Joi.object({
@@ -22,3 +22,7 @@ export const updateContactSchema = Joi.object({
 })
   .min(1)
   .message("Body must have at least one field");
+
+export const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
