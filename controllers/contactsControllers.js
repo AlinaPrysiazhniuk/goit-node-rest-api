@@ -1,5 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../models/contacts.js";
+import {
+  createContactSchema,
+  updateContactSchema,
+} from "../schemas/contactsSchemas.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
@@ -15,6 +19,8 @@ export const getAllContacts = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
+    await createContactSchema.validateAsync(req.body);
+
     const result = await Contact.create(req.body);
 
     res.status(201).json(result);
@@ -35,6 +41,8 @@ export const getOneContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
+    await updateContactSchema.validateAsync(req.body);
+
     const { id } = req.params;
     const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     res.status(200).json(result);
