@@ -19,10 +19,7 @@ export const getAllContacts = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
-    // await createContactSchema.validateAsync(req.body);
-
     const result = await Contact.create(req.body);
-
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -45,8 +42,6 @@ export const getOneContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    await updateContactSchema.validateAsync(req.body);
-
     const { id } = req.params;
     const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (!result) {

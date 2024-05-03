@@ -10,7 +10,10 @@ import {
 
 import { isValidId } from "../middlewares/isValidId.js";
 import { validateBody } from "../middlewares/validateBody.js";
-import { createContactSchema } from "../schemas/contactsSchemas.js";
+import {
+  createContactSchema,
+  updateContactSchema,
+} from "../schemas/contactsSchemas.js";
 
 const contactsRouter = express.Router();
 
@@ -22,7 +25,12 @@ contactsRouter.delete("/:id", isValidId, deleteContact);
 
 contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
-contactsRouter.put("/:id", isValidId, updateContact);
+contactsRouter.put(
+  "/:id",
+  isValidId,
+  validateBody(updateContactSchema),
+  updateContact
+);
 
 contactsRouter.patch("/:id/favorite", isValidId, updateStatusContact);
 
