@@ -1,2 +1,0 @@
-DB_URI=mongodb+srv://Alina:FDd0fFouz1dnUwko@cluster0.79n85ax.mongodb.net/db_contacts?retryWrites=true&w=majority&appName=Cluster0
-PORT=3000
