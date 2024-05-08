@@ -9,14 +9,18 @@ export const register = async (req, res, next) => {
 
     if (user !== null) {
       throw HttpError(409, "Email in use");
-      //   return res.status(409).send("Email in use");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const result = await User.create({ email, password: passwordHash });
-    console.log({ result });
-    res.status(201).send("Registration succesfully");
+    await User.create({ email, password: passwordHash });
+
+    res.status(201).send({
+      user: {
+        email: email,
+        subscription: "starter",
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -29,14 +33,21 @@ export const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user === null) {
-      return res.status(401).send("Email or password is incorrect");
+      return res.status(401).send({ message: "Email or password is wrong" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch === false) {
-      return res.status(401).send("Email or password is incorrect");
+      return res.status(401).send({ message: "Email or password is wrong" });
     }
-    res.send("Login");
+
+    res.status(200).send({
+      token: "token",
+      user: {
+        email: email,
+        subscription: "starter",
+      },
+    });
   } catch (error) {
     next(error);
   }
