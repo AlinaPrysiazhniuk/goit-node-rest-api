@@ -1,6 +1,7 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
+import JWT from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -41,8 +42,11 @@ export const login = async (req, res, next) => {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
+    const token = JWT.sign({ id: user.id }, process.env.JWT_SECRET);
+
+    // res.send(token);
     res.status(200).send({
-      token: "token",
+      token: token,
       user: {
         email: email,
         subscription: "starter",
@@ -51,6 +55,4 @@ export const login = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-  res.send("login");
 };
