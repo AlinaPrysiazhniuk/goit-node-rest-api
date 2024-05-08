@@ -1,5 +1,6 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
+import HttpError from "../helpers/HttpError.js";
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -7,7 +8,8 @@ export const register = async (req, res, next) => {
     const user = await User.findOne({ email: email });
 
     if (user !== null) {
-      return res.status(409).send("User already registered");
+      throw HttpError(409, "Email in use");
+      //   return res.status(409).send("Email in use");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
