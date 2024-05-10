@@ -36,12 +36,12 @@ export const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user === null) {
-      return res.status(401).send({ message: "Email or password is wrong" });
+      throw HttpError(401, "Email or password is wrong");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch === false) {
-      return res.status(401).send({ message: "Email or password is wrong" });
+      throw HttpError(401, "Email or password is wrong");
     }
 
     const payload = {
