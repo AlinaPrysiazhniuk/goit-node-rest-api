@@ -69,8 +69,14 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    await User.findByIdAndUpdate(req.user.id, { token: null });
-    console.log("logout");
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      throw HttpError(401, "Not authorized");
+    }
+    user.token = null;
+    await user.save();
+
     res.status(204).end();
   } catch (error) {
     next(error);
