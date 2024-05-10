@@ -4,11 +4,15 @@ import { Contact } from "../models/contacts.js";
 export const getAllContacts = async (req, res, next) => {
   try {
     const { id: owner } = req.user;
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, favorite } = req.query;
     const skip = (page - 1) * limit;
-    const result = await Contact.find({ owner })
-      .skip(skip)
-      .limit(parseInt(limit));
+
+    const filter = { owner };
+    if (favorite === "true") {
+      filter.favorite = true;
+    }
+
+    const result = await Contact.find(filter).skip(skip).limit(parseInt(limit));
     if (!result) {
       throw HttpError(404, "Contacts not found");
     }
