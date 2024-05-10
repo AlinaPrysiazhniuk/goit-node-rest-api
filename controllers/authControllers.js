@@ -53,7 +53,7 @@ export const login = async (req, res, next) => {
       expiresIn: "23h",
     });
 
-    // await User.findByIdAndUpdate(user._id, { token });
+    await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).send({
       token: token,
