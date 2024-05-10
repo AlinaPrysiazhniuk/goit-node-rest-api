@@ -55,7 +55,7 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-export const deleteContact = async (error, req, res, next) => {
+export const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await Contact.findByIdAndDelete(id);
