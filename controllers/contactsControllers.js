@@ -1,15 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../models/contacts.js";
 
-export const getAll = async (req, res, next) => {
-  try {
-    console.log("hello");
-    res.send("hello");
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getAllContacts = async (req, res, next) => {
   try {
     const result = await Contact.find();
@@ -23,8 +14,9 @@ export const getAllContacts = async (req, res, next) => {
 };
 
 export const createContact = async (req, res, next) => {
+  const { id: owner } = req.user;
   try {
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);

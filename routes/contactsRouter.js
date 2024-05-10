@@ -6,11 +6,11 @@ import {
   createContact,
   updateContact,
   updateStatusContact,
-  getAll,
 } from "../controllers/contactsControllers.js";
 
 import { isValidId } from "../middlewares/isValidId.js";
 import { validateBody } from "../middlewares/validateBody.js";
+import { authenticate } from "../middlewares/authenticate.js";
 import {
   createContactSchema,
   updateContactSchema,
@@ -19,14 +19,18 @@ import {
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/all", getAll);
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", authenticate, getAllContacts);
 
 contactsRouter.get("/:id", isValidId, getOneContact);
 
 contactsRouter.delete("/:id", isValidId, deleteContact);
 
-contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post(
+  "/",
+  authenticate,
+  validateBody(createContactSchema),
+  createContact
+);
 
 contactsRouter.put(
   "/:id",

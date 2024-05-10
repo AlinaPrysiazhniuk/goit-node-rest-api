@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
 
+const { JWT_SECRET } = process.env;
+
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -42,9 +44,17 @@ export const login = async (req, res, next) => {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
-    const token = JWT.sign({ id: user.id }, process.env.JWT_SECRET);
+    const payload = {
+      id: user._id,
+      email: user.email,
+    };
 
-    // res.send(token);
+    const token = JWT.sign(payload, JWT_SECRET, {
+      expiresIn: "23h",
+    });
+
+    // await User.findByIdAndUpdate(user._id, { token });
+
     res.status(200).send({
       token: token,
       user: {
