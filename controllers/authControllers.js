@@ -83,7 +83,7 @@ export const logout = async (req, res, next) => {
   }
 };
 
-export const current = async (req, res, next) => {
+export const current = async (req, res) => {
   const { email, subscription } = req.user;
   res.send({
     email,
