@@ -23,22 +23,13 @@ export const authenticate = async (req, res, next) => {
     if (!user) {
       throw new HttpError(401, "Not authorized");
     }
+
+    if (user.token !== token) {
+      throw new HttpError(401, "Not authorized1");
+    }
     req.user = user;
     next();
   } catch (error) {
     next(error);
   }
 };
-// JWT.verify(token, JWT_SECRET, async (err, decode) => {
-//   if (err) {
-//     return res.status(401).send({ message: "Not authorized" });
-//   }
-
-//   req.user = {
-//     id: decode.id,
-//     email: decode.email
-//   };
-
-//   next();
-
-// });
