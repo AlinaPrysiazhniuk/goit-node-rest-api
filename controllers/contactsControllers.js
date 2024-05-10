@@ -4,10 +4,7 @@ import { Contact } from "../models/contacts.js";
 export const getAllContacts = async (req, res, next) => {
   try {
     const { id: owner } = req.user;
-    const result = await Contact.find({ owner }).populate(
-      "owner",
-      "_id, email"
-    );
+    const result = await Contact.find({ owner });
     if (!result) {
       throw HttpError(404, "Contacts not found");
     }
