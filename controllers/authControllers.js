@@ -90,3 +90,17 @@ export const current = async (req, res) => {
     subscription,
   });
 };
+
+export const subscription = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  const { subscription } = req.body;
+  if (!["starter", "pro", "business"].includes(subscription)) {
+    return res.status(400).json({
+      message:
+        "Please select a subscription from the available options: starter, pro, business",
+    });
+  }
+  await User.findByIdAndUpdate(user.id, { subscription });
+
+  res.send(user);
+};

@@ -4,6 +4,7 @@ import {
   login,
   logout,
   current,
+  subscription,
 } from "../controllers/authControllers.js";
 import { registerSchema, loginSchema } from "../schemas/usersSchemas.js";
 import { validateBody } from "../middlewares/validateBody.js";
@@ -15,5 +16,6 @@ authRouter.post("/register", validateBody(registerSchema), register);
 authRouter.post("/login", validateBody(loginSchema), login);
 authRouter.post("/logout", authenticate, logout);
 authRouter.get("/current", authenticate, current);
+authRouter.patch("/", authenticate, subscription);
 
 export default authRouter;
