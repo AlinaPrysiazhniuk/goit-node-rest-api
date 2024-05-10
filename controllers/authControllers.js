@@ -82,3 +82,11 @@ export const logout = async (req, res, next) => {
     next(error);
   }
 };
+
+export const current = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  res.send({
+    email,
+    subscription,
+  });
+};
