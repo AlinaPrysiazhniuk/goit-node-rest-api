@@ -70,10 +70,6 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-
-    if (!user) {
-      throw HttpError(401, "Not authorized");
-    }
     user.token = null;
     await user.save();
 
