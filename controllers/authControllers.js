@@ -69,9 +69,7 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
-    user.token = null;
-    await user.save();
+    await User.findByIdAndUpdate(req.user.id, { token: null });
 
     res.status(204).end();
   } catch (error) {
