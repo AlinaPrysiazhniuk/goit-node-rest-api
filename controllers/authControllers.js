@@ -2,8 +2,11 @@ import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
 
 const { JWT_SECRET } = process.env;
+const avatarPath = path.resolve("public", "avatars");
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -97,4 +100,17 @@ export const subscription = async (req, res) => {
   await User.findByIdAndUpdate(user.id, { subscription });
 
   res.send(user);
+};
+
+export const updateAvatar = async (req, res) => {
+  const { id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${id}_${originalname}`;
+  const resultUpload = path.join(avatarPath, filename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(id, { avatarURL });
+  res.json({
+    avatarURL,
+  });
 };
