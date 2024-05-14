@@ -4,6 +4,7 @@ import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
+import gravatar from "gravatar";
 
 const { JWT_SECRET } = process.env;
 const avatarPath = path.resolve("public", "avatars");
@@ -18,8 +19,9 @@ export const register = async (req, res, next) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
 
-    await User.create({ email, password: passwordHash });
+    await User.create({ email, password: passwordHash, avatarURL });
 
     res.status(201).send({
       user: {
