@@ -11,11 +11,9 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     //під яким іменем має зберегатися файл
-    const extname = path.extname(file.originalname); // .png
-    const basename = path.basename(file.originalname, extname); // TrevorPhilips-GTAV
+    const extname = path.extname(file.originalname);
+    const basename = path.basename(file.originalname, extname);
     const suffix = crypto.randomUUID();
-
-    console.log(`${basename}-${suffix}${extname}`);
     cb(null, `${basename}-${suffix}${extname}`);
   },
 });

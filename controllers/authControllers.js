@@ -110,7 +110,6 @@ export const updateAvatar = async (req, res, next) => {
     const resultUpload = path.resolve("public/avatars", req.file.filename);
     await fs.rename(tmpUpload, resultUpload);
     const { id } = req.user;
-    // const { avatarURL } = req.file.filename;
     const user = await User.findByIdAndUpdate(
       id,
       { avatarURL: req.file.filename },
