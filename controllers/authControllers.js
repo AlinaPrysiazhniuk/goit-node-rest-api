@@ -109,14 +109,22 @@ export const updateAvatar = async (req, res, next) => {
   try {
     const tmpUpload = req.file.path;
     const resultUpload = path.resolve("public/avatars", req.file.filename);
-    // const { id } = req.user;
+    await fs.rename(tmpUpload, resultUpload);
+    const { id } = req.user;
+    const { avatarURL } = req.file.filename;
+    const user = await User.findByIdAndUpdate(id, avatarURL, { new: true });
+
+    if (user === null) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
     // const { path: tempUpload, originalname } = req.file;
     // // const filename = `${id}_${originalname}`;
     // const resultUpload = path.join(avatarPath, o);
-    await fs.rename(tmpUpload, resultUpload);
+
     // const avatarURL = path.join("avatars", filename);
     // await User.findByIdAndUpdate(id, { avatarURL });
-    res.send("avatarURL");
+    res.json(user);
   } catch (error) {
     next(error);
   }
