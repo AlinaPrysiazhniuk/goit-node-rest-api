@@ -7,7 +7,6 @@ import path from "path";
 import gravatar from "gravatar";
 
 const { JWT_SECRET } = process.env;
-const avatarPath = path.resolve("public", "avatars");
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -104,15 +103,15 @@ export const subscription = async (req, res) => {
   res.send(user);
 };
 
+// const avatarPath = path.resolve("public", "avatars");
+
 export const updateAvatar = async (req, res) => {
-  const { id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${id}_${originalname}`;
-  const resultUpload = path.join(avatarPath, filename);
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(id, { avatarURL });
-  res.json({
-    avatarURL,
-  });
+  // const { id } = req.user;
+  // const { path: tempUpload, originalname } = req.file;
+  // // const filename = `${id}_${originalname}`;
+  // const resultUpload = path.join(avatarPath, o);
+  // await fs.rename(tempUpload, resultUpload);
+  // const avatarURL = path.join("avatars", filename);
+  // await User.findByIdAndUpdate(id, { avatarURL });
+  res.send("avatarURL");
 };
