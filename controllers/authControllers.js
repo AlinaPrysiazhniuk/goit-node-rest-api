@@ -26,6 +26,7 @@ export const register = async (req, res, next) => {
       user: {
         email: email,
         subscription: "starter",
+        avatarURL: avatarURL,
       },
     });
   } catch (error) {
@@ -103,28 +104,43 @@ export const subscription = async (req, res) => {
   res.send(user);
 };
 
-// const avatarPath = path.resolve("public", "avatars");
-
 export const updateAvatar = async (req, res, next) => {
   try {
     const tmpUpload = req.file.path;
     const resultUpload = path.resolve("public/avatars", req.file.filename);
     await fs.rename(tmpUpload, resultUpload);
     const { id } = req.user;
-    const { avatarURL } = req.file.filename;
-    const user = await User.findByIdAndUpdate(id, avatarURL, { new: true });
-
+    // const { avatarURL } = req.file.filename;
+    const user = await User.findByIdAndUpdate(
+      id,
+      { avatarURL: req.file.filename },
+      { new: true }
+    );
+    console.log(user.avatarURL);
     if (user === null) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    // const { path: tempUpload, originalname } = req.file;
-    // // const filename = `${id}_${originalname}`;
-    // const resultUpload = path.join(avatarPath, o);
-
-    // const avatarURL = path.join("avatars", filename);
-    // await User.findByIdAndUpdate(id, { avatarURL });
     res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAvatar = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    console.log(user.avatarURL);
+    if (user === null) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    if (user.avatarURL === null) {
+      return res.status(404).send({ message: "Avatar not found" });
+    }
+    // res.send("user1");
+
+    res.sendFile(path.resolve("public/avatars", user.avatarURL));
   } catch (error) {
     next(error);
   }

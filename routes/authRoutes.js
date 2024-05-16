@@ -6,6 +6,7 @@ import {
   current,
   subscription,
   updateAvatar,
+  getAvatar,
 } from "../controllers/authControllers.js";
 import { registerSchema, loginSchema } from "../schemas/usersSchemas.js";
 import { validateBody } from "../middlewares/validateBody.js";
@@ -25,5 +26,6 @@ authRouter.patch(
   upload.single("avatar"),
   updateAvatar
 );
+authRouter.get("/avatars", authenticate, getAvatar);
 
 export default authRouter;
