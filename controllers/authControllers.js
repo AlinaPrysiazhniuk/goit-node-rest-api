@@ -105,13 +105,19 @@ export const subscription = async (req, res) => {
 
 // const avatarPath = path.resolve("public", "avatars");
 
-export const updateAvatar = async (req, res) => {
-  // const { id } = req.user;
-  // const { path: tempUpload, originalname } = req.file;
-  // // const filename = `${id}_${originalname}`;
-  // const resultUpload = path.join(avatarPath, o);
-  // await fs.rename(tempUpload, resultUpload);
-  // const avatarURL = path.join("avatars", filename);
-  // await User.findByIdAndUpdate(id, { avatarURL });
-  res.send("avatarURL");
+export const updateAvatar = async (req, res, next) => {
+  try {
+    const tmpUpload = req.file.path;
+    const resultUpload = path.resolve("public/avatars", req.file.filename);
+    // const { id } = req.user;
+    // const { path: tempUpload, originalname } = req.file;
+    // // const filename = `${id}_${originalname}`;
+    // const resultUpload = path.join(avatarPath, o);
+    await fs.rename(tmpUpload, resultUpload);
+    // const avatarURL = path.join("avatars", filename);
+    // await User.findByIdAndUpdate(id, { avatarURL });
+    res.send("avatarURL");
+  } catch (error) {
+    next(error);
+  }
 };
