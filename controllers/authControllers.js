@@ -104,43 +104,20 @@ export const subscription = async (req, res) => {
   res.send(user);
 };
 
-export const updateAvatar = async (req, res, next) => {
-  try {
-    const tmpUpload = req.file.path;
-    const resultUpload = path.resolve("public/avatars", req.file.filename);
-    await fs.rename(tmpUpload, resultUpload);
-    const { id } = req.user;
-    const user = await User.findByIdAndUpdate(
-      id,
-      { avatarURL: req.file.filename },
-      { new: true }
-    );
-    console.log(user.avatarURL);
-    if (user === null) {
-      return res.status(404).send({ message: "User not found" });
-    }
+// export const getAvatar = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.user.id);
 
-    res.json(user);
-  } catch (error) {
-    next(error);
-  }
-};
+//     if (user === null) {
+//       throw HttpError(401, "Not authorized");
+//     }
 
-export const getAvatar = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id);
-    console.log(user.avatarURL);
-    if (user === null) {
-      return res.status(404).send({ message: "User not found" });
-    }
+//     if (user.avatarURL === null) {
+//       return res.status(404).send({ message: "Avatar not found" });
+//     }
 
-    if (user.avatarURL === null) {
-      return res.status(404).send({ message: "Avatar not found" });
-    }
-    // res.send("user1");
-
-    res.sendFile(path.resolve("public/avatars", user.avatarURL));
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.sendFile(path.resolve("public/avatars", user.avatarURL));
+//   } catch (error) {
+//     next(error);
+//   }
+// };
