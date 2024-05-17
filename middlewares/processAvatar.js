@@ -5,7 +5,7 @@ import HttpError from "../helpers/HttpError.js";
 
 export const processAvatar = async (req, res, next) => {
   if (!req.file) {
-    throw HttpError(400, "No file uploaded");
+    return next(HttpError(400, "No file uploaded"));
   }
 
   const { path: tempPath, filename } = req.file;
