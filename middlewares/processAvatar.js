@@ -1,10 +1,11 @@
 import path from "path";
 import Jimp from "jimp";
 import fs from "fs/promises";
+import HttpError from "../helpers/HttpError.js";
 
 export const processAvatar = async (req, res, next) => {
   if (!req.file) {
-    return next(new Error("No file uploaded"));
+    throw HttpError(400, "No file uploaded");
   }
 
   const { path: tempPath, filename } = req.file;
@@ -20,8 +21,6 @@ export const processAvatar = async (req, res, next) => {
     });
     req.file.path = outputPath;
     next();
-
-    console.log("avatar");
   } catch (error) {
     next(error);
   }
