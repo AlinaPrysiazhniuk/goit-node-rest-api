@@ -12,7 +12,7 @@ export const updateAvatar = async (req, res, next) => {
     const { id } = req.user;
     const user = await User.findByIdAndUpdate(
       id,
-      { avatarURL: path.join("avatars", req.file.filename) },
+      { avatarURL: path.join("/avatars", req.file.filename) },
       { new: true }
     );
     if (user === null) {
