@@ -2,8 +2,6 @@ import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
-import fs from "fs/promises";
-import path from "path";
 import gravatar from "gravatar";
 
 const { JWT_SECRET } = process.env;
@@ -103,21 +101,3 @@ export const subscription = async (req, res) => {
 
   res.send(user);
 };
-
-// export const getAvatar = async (req, res, next) => {
-//   try {
-//     const user = await User.findById(req.user.id);
-
-//     if (user === null) {
-//       throw HttpError(401, "Not authorized");
-//     }
-
-//     if (user.avatarURL === null) {
-//       return res.status(404).send({ message: "Avatar not found" });
-//     }
-
-//     res.sendFile(path.resolve("public/avatars", user.avatarURL));
-//   } catch (error) {
-//     next(error);
-//   }
-// };
