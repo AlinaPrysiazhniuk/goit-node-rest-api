@@ -3,9 +3,11 @@ import { authenticate } from "../middlewares/authenticate.js";
 import { upload } from "../middlewares/upload.js";
 import { updateAvatar } from "../controllers/userControllers.js";
 import { processAvatar } from "../middlewares/processAvatar.js";
+import { verify } from "../controllers/userControllers.js";
 
 const userRouter = express.Router();
 
+userRouter.get("/verify/:token", verify);
 userRouter.patch(
   "/avatars",
   authenticate,
