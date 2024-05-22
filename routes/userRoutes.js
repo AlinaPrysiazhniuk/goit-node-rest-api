@@ -7,7 +7,7 @@ import { verify } from "../controllers/userControllers.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/verify/:token", verify);
+userRouter.get("/verify/:verificationToken", verify);
 userRouter.patch(
   "/avatars",
   authenticate,

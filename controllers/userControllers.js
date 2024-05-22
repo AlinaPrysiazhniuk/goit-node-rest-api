@@ -26,11 +26,11 @@ export const updateAvatar = async (req, res, next) => {
 };
 
 export const verify = async (req, res, next) => {
-  const { token } = req.params;
-  console.log(token);
+  const { verificationToken } = req.params;
+  console.log(verificationToken);
 
   try {
-    const user = await User.findOne({ verifyToken: token });
+    const user = await User.findOne({ verificationToken: verificationToken });
 
     if (user === null) {
       return res.status(404).send({ message: "User not found" });
@@ -38,7 +38,7 @@ export const verify = async (req, res, next) => {
 
     await User.findByIdAndUpdate(user._id, {
       verify: true,
-      verifyToken: null,
+      verificationToken: null,
     });
 
     res.send({ message: "Email confirm successfully" });
