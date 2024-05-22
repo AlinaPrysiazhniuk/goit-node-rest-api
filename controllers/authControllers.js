@@ -1,3 +1,4 @@
+// import { nanoid } from "nanoid";
 import crypto from "node:crypto";
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
@@ -19,21 +20,21 @@ export const register = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
-    const verifyToken = crypto.randomUUID();
+    const verificationToken = crypto.randomUUID();
 
     await User.create({
       email,
       password: passwordHash,
       avatarURL,
-      verifyToken,
+      verificationToken,
     });
 
     mail.sendMail({
       to: email,
       from: "alinkaprisiazhnuyk@gmail.com",
       subject: "Welcome in our app",
-      html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${verifyToken}">link</a>`,
-      text: `To confirm your email please open the link http://localhost:3000/users/verify/${verifyToken}`,
+      html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${verificationToken}">link</a>`,
+      text: `To confirm your email please open the link http://localhost:3000/users/verify/${verificationToken}`,
     });
 
     res.status(201).send({
@@ -41,7 +42,7 @@ export const register = async (req, res, next) => {
         email: email,
         subscription: "starter",
         avatarURL: avatarURL,
-        verifyToken: verifyToken,
+        verificationToken: verificationToken,
       },
     });
   } catch (error) {

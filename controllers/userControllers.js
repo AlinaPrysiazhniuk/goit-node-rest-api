@@ -18,7 +18,6 @@ export const updateAvatar = async (req, res, next) => {
     if (user === null) {
       throw HttpError(401, "Not authorized");
     }
-    console.log(user.avatarURL);
     res.json({ avatarURL: user.avatarURL });
   } catch (error) {
     next(error);
