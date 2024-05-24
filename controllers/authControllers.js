@@ -1,13 +1,13 @@
-// import { nanoid } from "nanoid";
+import "dotenv/config";
 import crypto from "node:crypto";
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
 import gravatar from "gravatar";
-import mail from "../mail.js";
+import { sendEmail } from "../helpers/emailOptions.js";
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, LOCAL_HOST } = process.env;
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -29,13 +29,14 @@ export const register = async (req, res, next) => {
       verificationToken,
     });
 
-    mail.sendMail({
+    const verifyEmail = {
       to: email,
-      from: "alinkaprisiazhnuyk@gmail.com",
       subject: "Welcome in our app",
-      html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${verificationToken}">link</a>`,
-      text: `To confirm your email please open the link http://localhost:3000/users/verify/${verificationToken}`,
-    });
+      html: `To confirm your email please go to the <a href="${LOCAL_HOST}/users/verify/${verificationToken}">link</a>`,
+      text: `To confirm your email please open the link ${LOCAL_HOST}/users/verify/${verificationToken}`,
+    };
+
+    await sendEmail(verifyEmail);
 
     res.status(201).send({
       user: {

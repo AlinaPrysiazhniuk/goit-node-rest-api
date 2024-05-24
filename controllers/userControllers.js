@@ -1,8 +1,11 @@
+import "dotenv/config";
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
 import fs from "fs/promises";
 import path from "path";
-import mail from "../mail.js";
+import { sendEmail } from "../helpers/emailOptions.js";
+
+const { LOCAL_HOST } = process.env;
 
 export const updateAvatar = async (req, res, next) => {
   try {
@@ -60,13 +63,14 @@ export const resendVerifyEmail = async (req, res, next) => {
       throw HttpError(400, "Verification has already been passed");
     }
 
-    mail.sendMail({
+    const verifyEmail = {
       to: email,
-      from: "alinkaprisiazhnuyk@gmail.com",
       subject: "Welcome in our app",
-      html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
-      text: `To confirm your email please open the link http://localhost:3000/users/verify/${user.verificationToken}`,
-    });
+      html: `To confirm your email please go to the <a href="${LOCAL_HOST}/users/verify/${user.verificationToken}">link</a>`,
+      text: `To confirm your email please open the link ${LOCAL_HOST}/users/verify/${user.verificationToken}`,
+    };
+
+    await sendEmail(verifyEmail);
 
     res.status(201).send({
       message: "Verification email sent",
