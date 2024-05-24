@@ -9,16 +9,6 @@ const transport = nodemailer.createTransport({
   },
 });
 
-// const message = {
-//   to: "alinkaprisaizhnuyk@gmail.com",
-//   from: "alinkaprisaizhnuyk@gmail.com",
-//   subject: "sale",
-//   html: `<h1 style="color: red">"Click for sale"</h1>`,
-//   text: `Click for sale`,
-// };
-
-// transport.sendMail(message).then(console.log).catch(console.error);
-
 function sendMail(message) {
   return transport.sendMail(message);
 }
