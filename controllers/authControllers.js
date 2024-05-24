@@ -31,7 +31,7 @@ export const register = async (req, res, next) => {
 
     const verifyEmail = {
       to: email,
-      subject: "Welcome in our app",
+
       html: `To confirm your email please go to the <a href="${LOCAL_HOST}/users/verify/${verificationToken}">link</a>`,
       text: `To confirm your email please open the link ${LOCAL_HOST}/users/verify/${verificationToken}`,
     };
