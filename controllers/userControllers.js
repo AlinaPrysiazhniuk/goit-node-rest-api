@@ -64,8 +64,8 @@ export const resendVerifyEmail = async (req, res, next) => {
       to: email,
       from: "alinkaprisiazhnuyk@gmail.com",
       subject: "Welcome in our app",
-      html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
-      text: `To confirm your email please open the link http://localhost:3000/users/verify/${user.verificationToken}`,
+      html: `To confirm your email please go to the <a href="http://localhost:4000/users/verify/${user.verificationToken}">link</a>`,
+      text: `To confirm your email please open the link http://localhost:4000/users/verify/${user.verificationToken}`,
     });
 
     res.status(201).send({
