@@ -51,7 +51,7 @@ export const resendVerifyEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (!user) {
       throw HttpError(404, "User not found");
     }
@@ -67,7 +67,7 @@ export const resendVerifyEmail = async (req, res, next) => {
       html: `To confirm your email please go to the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
       text: `To confirm your email please open the link http://localhost:3000/users/verify/${user.verificationToken}`,
     });
-    console.log(user);
+
     res.status(201).send({
       message: "Verification email sent",
     });
