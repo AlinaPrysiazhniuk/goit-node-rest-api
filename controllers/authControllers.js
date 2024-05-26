@@ -1,10 +1,13 @@
+import "dotenv/config";
+import crypto from "node:crypto";
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import JWT from "jsonwebtoken";
 import gravatar from "gravatar";
+import { sendEmail } from "../helpers/emailOptions.js";
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, LOCAL_HOST } = process.env;
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -17,14 +20,29 @@ export const register = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
+    const verificationToken = crypto.randomUUID();
 
-    await User.create({ email, password: passwordHash, avatarURL });
+    await User.create({
+      email,
+      password: passwordHash,
+      avatarURL,
+      verificationToken,
+    });
+
+    const verifyEmail = {
+      to: email,
+      html: `To confirm your email please go to the <a href="${LOCAL_HOST}/users/verify/${verificationToken}">link</a>`,
+      text: `To confirm your email please open the link ${LOCAL_HOST}/users/verify/${verificationToken}`,
+    };
+
+    await sendEmail(verifyEmail);
 
     res.status(201).send({
       user: {
         email: email,
         subscription: "starter",
         avatarURL: avatarURL,
+        verificationToken: verificationToken,
       },
     });
   } catch (error) {
@@ -51,6 +69,10 @@ export const login = async (req, res, next) => {
       id: user._id,
       email: user.email,
     };
+
+    if (user.verify === false) {
+      return res.status(401).send({ message: "Please verify your email" });
+    }
 
     const token = JWT.sign(payload, JWT_SECRET, {
       expiresIn: "23h",
